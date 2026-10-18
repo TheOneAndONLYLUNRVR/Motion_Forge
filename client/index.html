@@ -1,0 +1,745 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion Forge 2.2.0 — Verified Lab</title>
+<style>
+:root{--bg:#0b0d10;--panel:#101318;--card:#171b22;--line:#282e38;--text:#f5f7fa;--muted:#8b94a2;--dim:#616b78;--accent:#e9ff58;--purple:#8b7dff}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text);font-family:"Segoe UI",Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}.app{height:100%;min-width:300px;display:flex;flex-direction:column}
+.top{height:54px;min-height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--line);background:#0d1014}
+.brand{display:flex;align-items:center;gap:9px}.logo{width:27px;height:27px;border-radius:8px;border:1px solid #39414c;background:#151a20;display:flex;align-items:end;justify-content:center;gap:2px;padding-bottom:6px}.logo i{display:block;width:3px;border-radius:3px;background:var(--accent)}.logo i:nth-child(1){height:7px}.logo i:nth-child(2){height:14px}.logo i:nth-child(3){height:10px}
+.name{font-size:11px;font-weight:800;letter-spacing:1.4px}.sub{font-size:8px;color:var(--dim);letter-spacing:.6px;margin-top:2px}
+.actions{display:flex;gap:4px}.icon{width:30px;height:30px;border:1px solid transparent;border-radius:8px;background:transparent;color:#89929e}.icon:hover{background:#191e25;border-color:#303742;color:#fff}
+.hero{padding:17px 15px 14px;border-bottom:1px solid var(--line);background:radial-gradient(circle at 100% 0,rgba(139,125,255,.17),transparent 38%),linear-gradient(#11151a,#0f1217)}
+.status{display:flex;gap:7px;align-items:center;color:var(--accent);font-size:8px;font-weight:800;letter-spacing:1.4px}.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(233,255,88,.55)}.ae{margin-left:auto;color:#69727f;letter-spacing:.2px}
+.hero h1{font-size:25px;line-height:1.02;letter-spacing:-1px;margin:9px 0 7px}.hero h1 span{color:#9ca5b1}.hero p{margin:0;color:#7b8592;font-size:10px;line-height:1.5}
+.search{height:40px;min-height:40px;margin:11px 12px 8px;border:1px solid #2b323c;border-radius:10px;background:#12161c;display:flex;align-items:center;padding:0 9px}.search:focus-within{border-color:#59636f;box-shadow:0 0 0 2px rgba(233,255,88,.05)}.search b{font-size:17px;color:#66707d;margin-right:7px;font-weight:400}.search input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:#eef1f4;font-size:11px}.search input::placeholder{color:#5e6774}.search kbd{font-size:8px;color:#65707d;border:1px solid #303741;border-radius:5px;padding:3px 5px}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;padding:0 12px 8px;border-bottom:1px solid var(--line)}.tab{flex:1 0 calc(25% - 4px);min-width:68px;border:0;border-radius:8px;padding:8px 3px;background:transparent;color:#707987;font-size:10px;font-weight:700}.tab.active{background:#1b2028;color:#fff}.tab:hover{color:#dfe3e8}
+.content{flex:1;min-height:0;overflow:auto;overflow-x:hidden;padding:12px;scrollbar-width:thin;scrollbar-color:#343b45 transparent}.panel{display:none}.panel.active{display:block}.head{display:flex;justify-content:space-between;align-items:end;margin:2px 1px 9px}.ey{font-size:8px;color:#606a77;letter-spacing:1.5px;font-weight:800}.head h2{margin:3px 0 0;font-size:15px}.count{font-size:9px;color:#59626e}
+.chips{display:flex;gap:5px;overflow:auto;margin-bottom:10px}.chip{white-space:nowrap;border:1px solid #2a3038;background:#12161c;color:#737d89;border-radius:99px;padding:6px 9px;font-size:9px}.chip.active{background:var(--accent);color:#11140b;border-color:var(--accent);font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:8px}.card{position:relative;min-width:0;transition:transform .12s ease,border-color .12s ease;border:1px solid #282f38;border-radius:12px;background:linear-gradient(#181c23,#14181e);padding:8px;overflow:hidden}.card:hover{border-color:#49525e;transform:translateY(-1px)}.preview{height:70px;border:1px solid #262d36;border-radius:8px;background:#0e1116;position:relative;overflow:hidden;margin-bottom:8px}.preview:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(233,255,88,.12),transparent 52%)}.shape{position:absolute;width:40px;height:20px;border-radius:5px;background:#edf0f3;left:50%;top:50%;transform:translate(-50%,-50%)}.fade .shape{animation:fade 2s infinite}.pop .shape{animation:pop 1.7s infinite}.slide .shape{animation:slide 1.8s infinite}.zoom .shape{animation:zoom 1.7s infinite}.rotate .shape{animation:rotate 2s infinite}.blur .shape{animation:blur 2s infinite}
+@keyframes fade{0%,100%{opacity:0;transform:translate(-50%,-5%)}45%,65%{opacity:1;transform:translate(-50%,-50%)}}@keyframes pop{0%,100%{transform:translate(-50%,-50%) scale(.72)}45%{transform:translate(-50%,-50%) scale(1.08)}65%{transform:translate(-50%,-50%) scale(1)}}@keyframes slide{0%,100%{transform:translate(-115%,-50%)}55%{transform:translate(-50%,-50%)}}@keyframes zoom{0%,100%{transform:translate(-50%,-50%) scale(.75);opacity:.4}55%{transform:translate(-50%,-50%) scale(1);opacity:1}}@keyframes rotate{0%,100%{transform:translate(-50%,-50%) rotate(-18deg)}55%{transform:translate(-50%,-50%) rotate(0)}}@keyframes blur{0%,100%{filter:blur(9px);opacity:.25}55%{filter:blur(0);opacity:1}}
+.card h3{font-size:10px;margin:0 0 3px}.card p{font-size:8px;color:#6e7784;margin:0;line-height:1.35}.apply{position:absolute;right:7px;bottom:7px;width:22px;height:22px;border-radius:7px;border:1px solid #333b46;background:#1c222a;color:#aab2bd}.apply:hover{background:var(--accent);border-color:var(--accent);color:#111}.star{position:absolute;right:10px;top:10px;color:#68717d;font-size:12px;z-index:2}.star.on{color:var(--accent)}
+.composer{border:1px solid #2c333d;border-radius:12px;background:linear-gradient(160deg,#171c24,#12161c);padding:12px;margin-bottom:12px}
+.composer-head h2{margin:3px 0 8px;font-size:14px}
+.composer input[type="text"]{width:100%;border:1px solid #2b323c;border-radius:9px;background:#0e1217;color:#eef1f4;padding:10px;font-size:11px;outline:0;margin-bottom:8px}
+.composer input[type="text"]:focus{border-color:#59636f;box-shadow:0 0 0 2px rgba(233,255,88,.06)}
+.composer-3d{display:flex;align-items:center;gap:7px;font-size:9px;color:#aeb6c0;margin-bottom:8px;cursor:pointer}
+.composer-3d input{accent-color:var(--accent)}
+.composer-hint{font-size:8px;color:#68727f;line-height:1.5;margin-bottom:10px}
+.card.zap{animation:zapPulse .45s ease}
+@keyframes zapPulse{0%{box-shadow:0 0 0 0 rgba(233,255,88,0);border-color:#282f38}30%{box-shadow:0 0 0 2px rgba(233,255,88,.55),0 0 18px rgba(233,255,88,.35);border-color:var(--accent)}100%{box-shadow:0 0 0 0 rgba(233,255,88,0);border-color:#282f38}}
+.card:active,.run:active,.apply:active,.composer-btn:active,.composer-btn2:active,.tool:active{transform:scale(.97)}
+.stale-warning{display:flex;gap:8px;align-items:flex-start;border:1px solid #6e5a1f;background:#241f10;color:#ffd876;border-radius:10px;padding:9px 10px;margin-bottom:10px;font-size:9px;line-height:1.5}
+.stale-warning span{font-size:14px}
+.graphpresetssaved{margin-top:12px;border-top:1px solid #242a33;padding-top:12px}
+.curve-del{opacity:.55;margin-left:4px;font-weight:800}
+.curve-del:hover{opacity:1;color:#ff8d8d}
+.rig{border:1px solid #2c333d;border-radius:12px;background:linear-gradient(160deg,#171c24,#12161c);padding:12px;margin-bottom:12px}
+.rig h2{margin:3px 0 8px;font-size:14px}
+.rigslots{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.rigslot{display:flex;flex-direction:column;gap:5px}.rigslot small{font-size:8px;color:#8a94a1;line-height:1.4;word-break:break-word}
+.rigbtn{width:100%;padding:8px}
+#apple .composer input[type="text"]{display:block}
+body.searching .panel{display:none!important}body.searching #searchpanel{display:block!important}
+.card.na{opacity:.4}.card.na h3:after{content:" • not installed";font-size:8px;color:#e08a8a}
+.composer-row{display:flex;gap:7px}
+.composer-btn{flex:1;border-color:var(--accent);background:var(--accent);color:#11140b;font-weight:800;padding:9px}
+.composer-btn:hover{filter:brightness(1.06)}
+.composer-btn2{flex:0 0 auto;border:1px solid #333c47;background:#1b2029;color:#dfe4e9;font-weight:700;padding:9px 12px;border-radius:9px;white-space:nowrap}
+.composer-btn2:hover{border-color:#59636f}
+.tools{display:grid;gap:7px}.tool{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #292f38;border-radius:10px;background:#151a20}.tool-icon{width:31px;height:31px;border-radius:8px;background:#1e242c;display:grid;place-items:center;font-weight:800;color:#d5dae0}.tool-info{flex:1}.tool-name{font-size:10px;font-weight:700}.tool-desc{font-size:8px;color:#69727e;margin-top:2px}.run{border:1px solid #343b45;background:#1c222a;color:#dce0e5;border-radius:7px;padding:6px 8px;font-size:9px;font-weight:700}.run:hover{border-color:#5a6470}
+.empty{border:1px dashed #303742;border-radius:12px;padding:25px 15px;text-align:center;color:#69727e;font-size:9px}.empty strong{display:block;color:#d9dde2;font-size:12px;margin-bottom:5px}.notice{position:sticky;top:0;z-index:4;margin-bottom:8px;padding:8px 9px;border-radius:8px;background:#172019;border:1px solid #2c4931;color:#a9c6ae;font-size:9px}.notice.error{background:#25191b;border-color:#513035;color:#e0abb0}
+.footer{height:25px;min-height:25px;border-top:1px solid #222831;display:flex;align-items:center;justify-content:space-between;padding:0 12px;color:#515a66;font-size:8px}.footer b{color:#747e8b}
+.modal{position:fixed;inset:0;background:rgba(3,5,7,.78);display:flex;align-items:center;justify-content:center;padding:14px;z-index:10}.modal.hidden{display:none}.modalbox{width:min(390px,100%);border:1px solid #39414c;border-radius:14px;background:#151a20;padding:15px;box-shadow:0 25px 80px rgba(0,0,0,.65)}.modalhead{display:flex;justify-content:space-between}.modalbox h2{margin:3px 0 15px;font-size:16px}.close{border:0;background:transparent;color:#929ba7;font-size:18px}.setting{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #282f38;padding:12px 0}.setting span{font-size:10px}.setting small{display:block;color:#68717e;font-size:8px;margin-top:2px}.modalbox button.save{border:1px solid var(--accent);background:var(--accent);color:#11140b;border-radius:8px;padding:8px 12px;font-weight:800;font-size:10px}.modalbox .danger{border:1px solid #39414c;background:#1c2229;color:#dfe3e7;border-radius:8px;padding:8px 12px;font-size:10px}
+.graphbox{border:1px solid #2a313a;border-radius:12px;background:#0d1116;padding:7px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.015)}#curve{width:100%;height:250px;display:block;border-radius:8px}.graphrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.graphpreset{border:1px solid #2a313a;background:#151a20;color:#aeb6c0;border-radius:8px;padding:7px 9px;font-size:9px}.graphpreset:hover{border-color:#59636f;color:#fff}.graphpreset.active{background:var(--accent);color:#11140b;border-color:var(--accent);font-weight:800}.graphread{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:8px;padding:8px;border:1px solid #252c35;border-radius:9px;background:#12161c}.graphread span{font:8px Consolas,monospace;color:#798390}.graphhint{font-size:8px;line-height:1.5;color:#68727f;margin:8px 2px}.transition .shape{animation:transitionIn 1.8s infinite}.text .shape:before{content:"Aa";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:14px;font-weight:800;color:#111}.text .shape{width:58px;height:25px}.type .shape{animation:typeIn 1.8s steps(5,end) infinite;transform-origin:left center}.wipe .shape{animation:wipeIn 1.8s infinite}.bounce .shape{animation:bounceIn 1.7s infinite}@keyframes transitionIn{0%,100%{transform:translate(-50%,-50%) scaleX(.1);opacity:.2}55%{transform:translate(-50%,-50%) scaleX(1);opacity:1}}@keyframes typeIn{0%,100%{clip-path:inset(0 100% 0 0);opacity:.2}55%{clip-path:inset(0 0 0 0);opacity:1}}@keyframes wipeIn{0%,100%{clip-path:inset(0 100% 0 0);transform:translate(-50%,-50%)}55%{clip-path:inset(0 0 0 0);transform:translate(-50%,-50%)}}@keyframes bounceIn{0%,100%{transform:translate(-50%,20px);opacity:.2}35%{transform:translate(-50%,-58%);opacity:1}55%{transform:translate(-50%,-47%)}75%{transform:translate(-50%,-50%)}}
+.warp .shape{animation:warpIn 2s ease-in-out infinite}
+@keyframes warpIn{0%,100%{transform:translate(-50%,-50%) skewX(0) scaleY(1)}25%{transform:translate(-50%,-50%) skewX(-9deg) scaleY(.9)}50%{transform:translate(-50%,-50%) skewX(7deg) scaleY(1.08)}75%{transform:translate(-50%,-50%) skewX(-4deg) scaleY(.96)}}
+.streak .shape{animation:streakIn 1.3s ease-in-out infinite}
+@keyframes streakIn{0%,100%{transform:translate(-92%,-50%);filter:blur(7px);opacity:.45}50%{transform:translate(-50%,-50%);filter:blur(0);opacity:1}100%{transform:translate(-8%,-50%);filter:blur(7px);opacity:.45}}
+.glow .shape{animation:glowIn 1.8s ease-in-out infinite}
+@keyframes glowIn{0%,100%{box-shadow:0 0 2px rgba(233,255,88,.15);opacity:.7}50%{box-shadow:0 0 22px rgba(233,255,88,.85);opacity:1}}
+.colorshift .shape{animation:colorshiftIn 2.4s linear infinite}
+@keyframes colorshiftIn{0%,100%{filter:hue-rotate(0deg) saturate(1) brightness(1)}50%{filter:hue-rotate(150deg) saturate(2) brightness(1.15)}100%{filter:hue-rotate(300deg) saturate(1) brightness(1)}}
+.grain .shape{animation:grainIn .45s steps(4,end) infinite}
+@keyframes grainIn{0%{opacity:.55}25%{opacity:1}50%{opacity:.68}75%{opacity:.95}100%{opacity:.55}}
+.jitter .shape{animation:jitterIn .45s linear infinite}
+@keyframes jitterIn{0%,100%{transform:translate(-50%,-50%)}20%{transform:translate(calc(-50% - 4px),calc(-50% - 2px))}40%{transform:translate(calc(-50% + 4px),calc(-50% + 3px))}60%{transform:translate(calc(-50% - 3px),calc(-50% + 2px))}80%{transform:translate(calc(-50% + 3px),calc(-50% - 3px))}}
+.erase .shape{animation:eraseIn 1.8s ease infinite}
+@keyframes eraseIn{0%,40%{opacity:1;transform:translate(-50%,-50%) scale(1)}70%,100%{opacity:0;transform:translate(-50%,-50%) scale(.6)}}
+.tracking .shape{width:58px;height:25px}
+.tracking .shape:before{content:"Aa";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:14px;font-weight:800;color:#111;animation:trackingIn 2s ease-in-out infinite}
+@keyframes trackingIn{0%,100%{letter-spacing:6px;opacity:.3}55%{letter-spacing:0;opacity:1}}
+.beatbar{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid #2a313a;border-radius:12px;background:linear-gradient(135deg,#151b22,#11151b);margin-bottom:10px}.beatbar>div{flex:1;min-width:0}.beatbar b{display:block;font-size:10px}.beatbar small{display:block;color:#68727e;font-size:8px;margin-top:3px}.beatbar input{width:62px;border:1px solid #343b45;border-radius:8px;background:#0e1217;color:#eef1f4;padding:7px;font-size:9px}.beatbar button{border:1px solid var(--accent);background:var(--accent);color:#11140b;border-radius:8px;padding:8px 10px;font-size:9px;font-weight:800}.bgvideo{width:100%;height:100%;object-fit:cover;display:block;opacity:.9}.video-card .preview{background:#090c10}.video-card .preview:after{background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.18))}.motion .card{min-height:130px}.motion .shape{box-shadow:0 0 18px rgba(233,255,88,.22)}@media(max-width:360px){.grid{grid-template-columns:1fr 1fr}.hero h1{font-size:22px}}
+body.compact .grid{grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:6px}
+body.compact .card{padding:6px}
+body.compact .preview{height:50px;margin-bottom:5px}
+body.compact .card h3{font-size:9px}
+body.compact .card p{display:none}
+body.no-preview .shape,body.no-preview .bgvideo{animation:none !important}
+body.no-preview video.bgvideo{display:none}
+.intro{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:radial-gradient(circle at 50% 30%,#171b22,#0b0d10 70%);transition:opacity .5s ease,visibility .5s ease;animation:introAutoHide .1s linear 4.5s forwards}
+.intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+@keyframes introAutoHide{to{opacity:0;visibility:hidden;pointer-events:none}}
+.intro-logo{display:flex;align-items:end;gap:5px;height:46px;margin-bottom:4px}
+.intro-logo i{display:block;width:9px;border-radius:5px;background:var(--accent);box-shadow:0 0 16px rgba(233,255,88,.45);animation:introBar 1.1s ease-in-out infinite}
+.intro-logo i:nth-child(1){height:20px;animation-delay:0s}
+.intro-logo i:nth-child(2){height:44px;animation-delay:.12s}
+.intro-logo i:nth-child(3){height:30px;animation-delay:.24s}
+@keyframes introBar{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1)}}
+.intro-name{font-size:15px;font-weight:800;letter-spacing:3px;color:#f5f7fa}
+.intro-sub{font-size:9px;letter-spacing:1.5px;color:#6e7784;text-transform:uppercase}
+.intro-bar{width:140px;height:3px;border-radius:3px;background:#1c222a;overflow:hidden;margin-top:10px}
+.intro-bar span{display:block;height:100%;width:0%;background:var(--accent);border-radius:3px;transition:width 1.1s cubic-bezier(.22,.08,.2,1)}
+
+.fontsearch{display:flex;gap:7px;margin:8px 0}.fontsearch input{flex:1;min-width:0;border:1px solid #2b323c;border-radius:9px;background:#12161c;color:#eef1f4;padding:10px;font-size:10px;outline:0}.fontsearch button{border:1px solid var(--accent);background:var(--accent);color:#11140b;border-radius:9px;padding:0 12px;font-size:9px;font-weight:800}.fontopts{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:7px 0 10px;color:#7d8793;font-size:8px}.fontopts label{display:flex;gap:4px;align-items:center}.fontopts a{margin-left:auto;color:#aeb7c1;text-decoration:none;border-bottom:1px dotted #66707c}.fontresults{display:grid;gap:7px}.fontresult{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid #292f38;border-radius:10px;background:#151a20}.fontpreview{flex:1;min-width:0;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fontmeta{font-size:8px;color:#68727e;margin-top:3px}.fontopen{border:1px solid #343b45;background:#1c222a;color:#dce0e5;border-radius:7px;padding:7px 9px;font-size:8px}.fontnote{margin-top:10px;padding:9px;border:1px dashed #303742;border-radius:9px;color:#69737f;font-size:8px;line-height:1.5}.camera-card{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid #292f38;border-radius:10px;background:#151a20}.camera-card .camicon{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:#1e242c;color:#dce1e7;font-size:17px}.camera-card .camcopy{flex:1}.camera-card b{font-size:10px}.camera-card p{font-size:8px;color:#68727e;margin:3px 0 0}.camera-card button{border:1px solid #343b45;background:#1c222a;color:#dce0e5;border-radius:7px;padding:7px 9px;font-size:8px;font-weight:700}.camera-card button:hover{background:var(--accent);border-color:var(--accent);color:#111}.tabs{overflow:visible}.tabs .tab{min-width:68px}.text .card,.transition .card{min-height:130px}.categoryline{font-size:7px;color:#59636f;letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+.specialgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.special{border:1px solid #292f38;border-radius:12px;background:linear-gradient(#181c23,#14181e);padding:10px}.special h3{font-size:10px;margin:0 0 4px}.special p{font-size:8px;color:#68727e;line-height:1.45;margin:0 0 9px}.special button{width:100%;border:1px solid #343b45;background:#1c222a;color:#dce0e5;border-radius:8px;padding:7px;font-size:8px;font-weight:700}.special button:hover{background:var(--accent);border-color:var(--accent);color:#111}.fontresult{flex-wrap:wrap}.fontactions{display:flex;gap:5px}.sfxnote{margin-bottom:9px;padding:9px;border:1px dashed #303742;border-radius:9px;color:#69737f;font-size:8px;line-height:1.5}.threegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.threegrid .tool{min-width:0}.beatbar{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid #2a313a;border-radius:12px;background:linear-gradient(135deg,#151b22,#11151b);margin-bottom:10px}.beatbar>div{flex:1;min-width:0}.beatbar b{display:block;font-size:10px}.beatbar small{display:block;color:#68727e;font-size:8px;margin-top:3px}.beatbar input{width:62px;border:1px solid #343b45;border-radius:8px;background:#0e1217;color:#eef1f4;padding:7px;font-size:9px}.beatbar button{border:1px solid var(--accent);background:var(--accent);color:#11140b;border-radius:8px;padding:8px 10px;font-size:9px;font-weight:800}.bgvideo{width:100%;height:100%;object-fit:cover;display:block;opacity:.9}.video-card .preview{background:#090c10}.video-card .preview:after{background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.18))}.motion .card{min-height:130px}.motion .shape{box-shadow:0 0 18px rgba(233,255,88,.22)}@media(max-width:360px){.specialgrid,.threegrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="intro" id="intro">
+  <div class="intro-logo"><i></i><i></i><i></i></div>
+  <div class="intro-name">MOTION FORGE</div>
+  <div class="intro-sub">2.2.0 • Expanded Motion Lab</div>
+  <div class="intro-bar"><span id="introBarFill"></span></div>
+</div>
+<script>
+(function(){
+  var intro=document.getElementById("intro"), fill=document.getElementById("introBarFill");
+  if(!intro) return;
+  function dismiss(){ intro.classList.add("hide"); }
+  requestAnimationFrame(function(){ if(fill) fill.style.width="100%"; });
+  try{
+    if(localStorage.getItem("mfv2_sfx")!=="0"){
+      var C=window.AudioContext||window.webkitAudioContext;
+      if(C){
+        var ctx=new C(), t0=ctx.currentTime;
+        (function(){
+          var o=ctx.createOscillator(), g=ctx.createGain();
+          o.type="sine"; o.frequency.setValueAtTime(90,t0); o.frequency.exponentialRampToValueAtTime(40,t0+.22);
+          g.gain.setValueAtTime(.001,t0); g.gain.exponentialRampToValueAtTime(.09,t0+.02); g.gain.exponentialRampToValueAtTime(.0001,t0+.26);
+          o.connect(g); g.connect(ctx.destination); o.start(t0); o.stop(t0+.28);
+        })();
+        [[420,.05],[640,.14],[860,.23]].forEach(function(p){
+          var o=ctx.createOscillator(), g=ctx.createGain();
+          o.type="sine"; o.frequency.setValueAtTime(p[0],t0+p[1]);
+          g.gain.setValueAtTime(.001,t0+p[1]);
+          g.gain.exponentialRampToValueAtTime(.05,t0+p[1]+.02);
+          g.gain.exponentialRampToValueAtTime(.0001,t0+p[1]+.22);
+          o.connect(g); g.connect(ctx.destination);
+          o.start(t0+p[1]); o.stop(t0+p[1]+.24);
+        });
+      }
+    }
+  }catch(e){}
+  var t=setTimeout(dismiss,2200);
+  intro.addEventListener("click",function(){ clearTimeout(t); dismiss(); });
+})();
+</script>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo"><i></i><i></i><i></i></div><div><div class="name">MOTION FORGE</div><div class="sub">MOTION TOOLKIT • 2.2.0</div></div></div>
+    <div class="actions"><button class="icon" id="refresh" title="Refresh">↻</button><button class="icon" id="settings" title="Settings">⚙</button></div>
+  </header>
+
+  <section class="hero">
+    <div class="status"><span class="dot" id="dot"></span><span id="status">READY</span><span class="ae" id="ae">AE —</span></div>
+    <h1>Motion, without the <span>busywork.</span></h1>
+    <p>Browse native animation presets, effects and production tools. Everything stays editable inside After Effects.</p>
+  </section>
+
+  <div class="search"><b>⌕</b><input id="q" placeholder="Search presets, effects, tools…" autocomplete="off"><kbd>/</kbd></div>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="text">Text</button>
+    <button class="tab" data-tab="motion">Motion</button>
+    <button class="tab" data-tab="transitions">Transitions</button>
+    <button class="tab" data-tab="effects">Effects</button>
+    <button class="tab" data-tab="graph">Graph</button>
+    <button class="tab" data-tab="camera">Camera</button>
+    <button class="tab" data-tab="tools">Tools</button>
+    <button class="tab" data-tab="fonts">Fonts</button>
+    <button class="tab" data-tab="apple">Apple</button>
+    <button class="tab" data-tab="special">Special</button>
+    <button class="tab" data-tab="sfx">SFX</button>
+    <button class="tab" data-tab="env3d">3D Env</button>
+    <button class="tab" data-tab="loops">Backgrounds</button>
+    <button class="tab" data-tab="library">Library</button>
+  </nav>
+
+  <main class="content">
+    <section class="panel active" id="text"><div class="head"><div><div class="ey">ANIMATION COMPOSER STYLE</div><h2>Text animations</h2></div><div class="count" id="textCount"></div></div><div class="chips" id="textchips"><button class="chip active" data-tcat="all">All</button><button class="chip" data-tcat="in">In</button><button class="chip" data-tcat="out">Out</button><button class="chip" data-tcat="loop">Loop</button><button class="chip" data-tcat="character">Character</button></div><div class="grid" id="textgrid"></div></section>
+    <section class="panel" id="motion">
+      <div class="head"><div><div class="ey">MOTION LAB</div><h2>Graphed motion</h2></div><div class="count" id="motionCount">MOTION</div></div>
+      <div class="beatbar">
+        <div><b>Beat Marker</b><small>Select an audio/video layer. Beats and spikes in its waveform are detected and marked automatically.</small></div>
+        <button id="beatRun">Detect &amp; Mark</button>
+      </div>
+      <div class="grid" id="motiongrid"></div>
+    </section>
+
+    <section class="panel" id="transitions"><div class="head"><div><div class="ey">VIDEO TRANSITIONS</div><h2>Transitions</h2></div><div class="count" id="transitionCount"></div></div><div class="chips" id="transchips"><button class="chip active" data-tcat="all">All</button><button class="chip" data-tcat="push">Push</button><button class="chip" data-tcat="slide">Slide</button><button class="chip" data-tcat="zoom">Zoom</button><button class="chip" data-tcat="wipe">Wipe</button><button class="chip" data-tcat="spin">Spin</button></div><div class="grid" id="transitiongrid"></div></section>
+
+    <div id="staleWarning" class="stale-warning" style="display:none"><span>⚠</span><div><b>Running an older engine.</b> After Effects hasn't picked up the latest host script yet. Fully quit After Effects (check Task Manager / Activity Monitor for a lingering AfterFX process) and reopen it.</div></div>
+    <div id="notice" class="notice" style="display:none"></div>
+
+    <section class="panel" id="effects">
+      <div class="head"><div><div class="ey">FX LIBRARY</div><h2>Your After Effects, organized</h2></div><div class="count" id="fxcount"></div></div>
+      <p class="graphhint">Every effect here is applied with After Effects' own native engine — nothing bundled, nothing that can go stale. The Third-Party category only shows plugins actually detected as installed on this computer (e.g. Twixtor, Trapcode) — if it's not installed, it simply won't appear.</p>
+      <div class="chips" id="fxchips">
+        <button class="chip active" data-fxfilter="all">All</button>
+        <button class="chip" data-fxfilter="Blur">Blur</button>
+        <button class="chip" data-fxfilter="Color">Color</button>
+        <button class="chip" data-fxfilter="Stylize">Stylize</button>
+        <button class="chip" data-fxfilter="Distort">Distort</button>
+        <button class="chip" data-fxfilter="Generate">Generate</button>
+        <button class="chip" data-fxfilter="Perspective">Perspective</button>
+        <button class="chip" data-fxfilter="Time">Time</button>
+        <button class="chip" data-fxfilter="Transition">Transition</button>
+        <button class="chip" data-fxfilter="Channel">Channel</button>
+        <button class="chip" data-fxfilter="Utility">Utility</button>
+        <button class="chip" data-fxfilter="Third-Party">Third-Party</button>
+      </div>
+      <div class="grid" id="fxgrid"></div>
+    </section>
+
+    <section class="panel" id="tools">
+      <div class="composer" id="textComposer">
+        <div class="composer-head"><div class="ey">TEXT COMPOSER</div><h2>Add a text layer</h2></div>
+        <input id="textInput" type="text" placeholder="Type what the text should say…" maxlength="500" autocomplete="off">
+        <label class="composer-3d"><input type="checkbox" id="text3DToggle"><span>Make this a 3D text layer</span></label>
+        <div class="composer-hint">3D layers can be positioned, rotated and lit in space. Real per-character extrusion additionally needs the Cinema 4D renderer — Motion Forge turns that on automatically when your After Effects install supports it, and still applies the 3D transform safely if it doesn't. After creating a layer, press <b>Set as Destination</b>, then use the Camera tab's Rig Jump to snap your camera rig onto it.</div>
+        <div class="composer-row"><button class="run composer-btn" id="textComposerBtn">Create Text Layer</button><button class="run composer-btn2" id="frameSelectedBtn" title="Use the selected layer as Slot 2 (destination) for the Camera Rig Jump">🎯 Set as Destination</button></div>
+      </div>
+      <div class="head"><div><div class="ey">UTILITY</div><h2>Production tools</h2></div></div>
+      <div class="composer" id="scriptComposer">
+  <div class="composer-head"><div class="ey">POWER TOOLS</div><h2>Run your own script</h2></div>
+  <textarea id="scriptInput" placeholder="Paste ExtendScript here, e.g. layers.forEach(function(l){l.transform.position.expression='wiggle(8,14)';})" rows="4" style="width:100%;resize:vertical;border:1px solid #2b323c;border-radius:9px;background:#0e1217;color:#eef1f4;padding:10px;font-size:10px;font-family:ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box;margin-bottom:8px"></textarea>
+  <div class="composer-hint">Runs as real ExtendScript against your project. Available to your code: <b>comp</b> (active composition), <b>layers</b> (array of selected layers), <b>layer</b> (first selected layer, or null), <b>project</b> (app.project), plus the full After Effects <b>app</b> object. Wrapped in one undo step.</div>
+  <button class="run composer-btn" id="scriptRunBtn" style="width:100%">Run Script</button>
+</div>
+<div class="composer" id="imageTemplateComposer">
+  <div class="composer-head"><div class="ey">POWER TOOLS</div><h2>Image → animated template</h2></div>
+  <input id="imgTplText" type="text" placeholder="Caption text (optional)" maxlength="200" autocomplete="off">
+  <label class="composer-3d"><input type="checkbox" id="imgTplAddText" checked><span>Add an editable text layer on top</span></label>
+  <label class="composer-3d"><input type="checkbox" id="imgTplAnimate" checked><span>Animate it in</span></label>
+  <label class="composer-3d"><input type="checkbox" id="imgTplPrecompose" checked><span>Collapse into one pre-comp layer</span></label>
+  <label class="composer-3d"><input type="checkbox" id="imgTplMatte"><span>Add a one-click crop mask</span></label>
+  <div class="composer-hint">Imports your image, fits it to the comp, and (if checked) adds a real, editable text layer on top — parented to the image, so moving/scaling/animating the image moves the text with it. Double-click the text layer afterward to type whatever you want; it's not baked into the image. The crop mask adds ready-to-drag handles just inside the image's edges — After Effects has no content-aware "isolate this one square" detection, so this gives you a starting mask to adjust rather than drawing one from scratch.</div>
+  <button class="run composer-btn" id="imgTplBtn" style="width:100%">Choose Image &amp; Build</button>
+</div>
+<div class="composer" id="audioComposer">
+  <div class="composer-head"><div class="ey">POWER TOOLS</div><h2>Attach audio to selected clips</h2></div>
+  <div class="composer-hint">Select the clips you want it on (Shift-click each one in the timeline), then press below. You'll be asked to pick the audio file once, and it's added aligned to the start of every selected clip.</div>
+  <button class="run composer-btn" id="audioAttachBtn" style="width:100%">Choose Audio &amp; Attach to Selected Clips</button>
+</div>
+<div class="tools" id="toolgrid"></div>
+    </section>
+
+    <section class="panel" id="graph">
+      <div class="head"><div><div class="ey">EASING LAB</div><h2>Graph editor</h2></div><div class="count">LIVE</div></div>
+      <div class="graphbox"><canvas id="curve" width="520" height="260"></canvas></div>
+      <div class="graphrow"><button class="graphpreset" data-curve="ease">Ease</button><button class="graphpreset" data-curve="linear">Linear</button><button class="graphpreset" data-curve="in">Ease In</button><button class="graphpreset" data-curve="out">Ease Out</button><button class="graphpreset" data-curve="overshoot">Overshoot</button><button class="graphpreset" data-curve="anticipate">Anticipate</button></div>
+      <div class="graphread"><span id="curveReadout">Cubic Bézier 0.25, 0.10, 0.25, 1.00</span><button class="run" id="applyCurve">Apply to selected keyframes</button><button class="run" id="smartCurve">Smart Ease</button></div>
+      <p class="graphhint">Drag the two handles. If the selected layer already has keyframes on Position/Scale/Rotation/Opacity, this re-eases them. If it has none yet, it creates and eases a simple opacity fade-in so you always see a result.</p>
+      <div class="graphpresetssaved"><div class="ey" style="margin-bottom:6px">YOUR SAVED CURVES</div><div class="graphrow" id="customCurveRow"></div>
+        <div class="composer-row" style="margin-top:7px"><input id="curvePresetName" type="text" placeholder="Name this curve…" maxlength="40" style="flex:1;border:1px solid #2b323c;border-radius:9px;background:#0e1217;color:#eef1f4;padding:8px;font-size:10px"><button class="run composer-btn2" id="saveCurvePreset">Save Current Curve</button></div>
+      </div>
+    </section>
+
+    <section class="panel" id="library">
+      <div class="head"><div><div class="ey">YOUR SPACE</div><h2>Library</h2></div></div>
+      <div class="empty" id="libraryEmpty"><strong>Your library is ready.</strong>Favorite presets with ★ and they will appear here.</div>
+      <div class="tools" id="favorites" style="margin-top:8px"></div>
+    </section>
+    <section class="panel" id="camera"><div class="rig" id="rig"><div class="ey">CAMERA RIG JUMP</div><h2>Snap your camera rig to a layer</h2>
+<div class="rigslots"><div class="rigslot"><button class="run rigbtn" id="slotABtn">① Set Slot 1</button><small id="slotALabel">Rig Null — the Null your camera is parented to</small></div><div class="rigslot"><button class="run rigbtn" id="slotBBtn">② Set Slot 2</button><small id="slotBLabel">Destination — text, image or any layer</small></div></div>
+<div class="composer-row"><button class="run composer-btn" id="rigJumpBtn">🎯 Jump Rig to Destination</button><button class="run composer-btn2" id="rigClearBtn">Clear</button></div>
+<div class="composer-hint">Select a layer, press Set Slot 1 (your Null), select another, press Set Slot 2, then Jump. The Null copies the destination's position (and orientation for 3D layers); the camera follows because it's parented to it.</div></div><div class="head"><div><div class="ey">CAMERA MOTION</div><h2>One-click camera animations</h2></div><div class="count">READY</div></div><div class="tools" id="cameratools"></div></section>
+    <section class="panel" id="fonts"><div class="head"><div><div class="ey">FONT FORGE</div><h2>Font browser</h2></div><div class="count" id="fontCount"></div></div><div class="fontsearch"><input id="fontQueries" placeholder="Search multiple fonts: bebas, orbitron, impact..."/><button id="fontSearchBtn">Search</button></div><div class="fontopts"><label><input type="checkbox" id="fontFree"/> Commercial-friendly filters</label><label><input type="checkbox" id="fontAccents"/> Accents</label><a id="fontDafont" target="_blank">Open DaFont search</a></div><div class="fontresults" id="fontresults"></div><div class="fontnote">Fonts are linked to their DaFont pages so users can review the author’s license before downloading. DaFont includes license categories such as Public Domain/GPL/OFL, 100% Free, Personal Use, Donationware and more.</div></section>
+    <section class="panel" id="searchpanel"><div class="head"><div><div class="ey">SEARCH</div><h2>Results across every tab</h2></div><div class="count" id="searchCount"></div></div><div class="tools" id="searchgrid"></div></section>
+
+<section class="panel" id="apple"><div class="head"><div><div class="ey">APPLE FEATURES</div><h2>iPhone messages &amp; notifications</h2></div><div class="count">PRE-COMP</div></div>
+<div class="chips" id="applekinds"><button class="chip active" data-kind="notif">Notification</button><button class="chip" data-kind="grey">Grey Sender</button><button class="chip" data-kind="blue">Blue Sender</button></div>
+<div class="composer"><input id="appleSender" type="text" placeholder="Sender name (e.g. Mom)" maxlength="60" autocomplete="off"><input id="appleText" type="text" placeholder="What the message says…" maxlength="300" autocomplete="off">
+<label class="composer-3d"><input type="checkbox" id="appleAnim" checked><span>Animate this message</span></label>
+<label class="composer-3d"><input type="checkbox" id="appleSF" checked><span>Use SF Pro Display Bold (Apple font)</span></label>
+<label class="composer-3d"><input type="checkbox" id="appleGlow"><span>Add Deep Glow 2</span></label>
+<div class="composer-hint" id="appleHint">Notification: you'll be asked to pick the app icon image. Everything is built and delivered as a single pre-comp. SF Pro must be installed on your computer; Deep Glow 2 falls back to the built-in Glow if it isn't installed.</div>
+<button class="run composer-btn" id="appleApply" style="width:100%">Apply</button></div></section>
+
+    <section class="panel" id="special"><div class="head"><div><div class="ey">SPECIAL MOTION LAB</div><h2>Signature tools</h2></div><div class="count">NATIVE AE</div></div><div class="specialgrid"><div class="special"><h3>Apple-style Text</h3><p>Clean, springy title motion inspired by modern product/UI motion language.</p><button data-id="appleText">Apply</button></div><div class="special"><h3>Glass Text</h3><p>Native frosted/glass-style text treatment without external plugins.</p><button data-id="glassText">Apply</button></div><div class="special"><h3>Spring Reveal</h3><p>Damped scale + opacity reveal for premium-feeling titles.</p><button data-id="springText">Apply</button></div><div class="special"><h3>Cursor Reveal</h3><p>Text reveal with a simple cursor-style accent.</p><button data-id="cursorText">Apply</button></div><div class="special"><h3>Parallax Title</h3><p>Convert selected text into a simple 3D depth setup with a camera.</p><button data-id="parallaxTitle">Apply</button></div></div></section>
+    <section class="panel" id="sfx"><div class="head"><div><div class="ey">SOUND FX</div><h2>Free CC0 SFX</h2></div><div class="count">ONE CLICK</div></div><div class="sfxnote">Motion Forge links to free CC0/public-domain packs. Use “Get pack” to open the source, then “Import file” to place a downloaded WAV/MP3 at the current comp time. CC0 packs are intended for reuse without attribution; always keep the source licence with the project.</div><div class="tools"><div class="tool"><div class="tool-icon">♪</div><div class="tool-info"><div class="tool-name">Arcade Interface SFX</div><div class="tool-desc">6 short UI clicks, hovers, confirms and errors • CC0</div></div><button class="run" data-sfx-url="https://colorosse.com/assets/audio/sfx/arcade-ui-sfx">Get pack</button></div><div class="tool"><div class="tool-icon">✓</div><div class="tool-info"><div class="tool-name">Import downloaded SFX</div><div class="tool-desc">Choose an audio file and add it to the active composition at the playhead.</div></div><button class="run" data-id="importSFX">Import</button></div><div class="tool"><div class="tool-icon">✂</div><div class="tool-info"><div class="tool-name">Quick Import + Trim</div><div class="tool-desc">Place an SFX at the playhead and trim it to a short usable hit.</div></div><button class="run" data-id="importSFXTrim">Quick</button></div></div>
+      <div class="head" style="margin-top:16px"><div><div class="ey">SOLO.AEP PACK</div><h2>Bundled hits &amp; wooshes</h2></div><div class="count" id="bundledSfxCount"></div></div><div class="tools" id="bundledSfxGrid"></div>
+    </section>
+
+    <section class="panel" id="loops"><div class="head"><div><div class="ey">MOTION BACKGROUNDS</div><h2>3D mograph loop backgrounds</h2></div><div class="count">ONE CLICK</div></div><p class="graphhint">Procedural, code-generated backgrounds — no bundled video files, so there's nothing that can fail from a missing codec or file path.</p><div class="grid" id="loopgrid"></div>
+      <div class="head" style="margin-top:16px"><div><div class="ey">SOLO.AEP PACK</div><h2>Overlay elements</h2></div><div class="count" id="overlayCount"></div></div><p class="graphhint">Fire, glitch and light-leak style overlay clips, added at the playhead with Screen blending. Change the blend mode afterward if it looks wrong on your footage.</p><div class="grid" id="overlaygrid"></div>
+    </section>
+    <section class="panel" id="env3d"><div class="head"><div><div class="ey">3D ENVIRONMENT LAB</div><h2>Build a scene</h2></div><div class="count">ONE CLICK</div></div><div class="threegrid"><div class="tool"><div class="tool-icon">▣</div><div class="tool-info"><div class="tool-name">Full 3D Environment</div><div class="tool-desc">Camera, floor, null, lights and depth-ready setup.</div></div><button class="run" data-id="env3dFull">Build</button></div><div class="tool"><div class="tool-icon">◎</div><div class="tool-info"><div class="tool-name">Camera Rig</div><div class="tool-desc">Create a 3D camera and controller null.</div></div><button class="run" data-id="env3dCamera">Build</button></div><div class="tool"><div class="tool-icon">□</div><div class="tool-info"><div class="tool-name">3D Floor</div><div class="tool-desc">Create a large 3D floor plane.</div></div><button class="run" data-id="env3dFloor">Build</button></div><div class="tool"><div class="tool-icon">☼</div><div class="tool-info"><div class="tool-name">3-Point Lights</div><div class="tool-desc">Key, fill and rim lights.</div></div><button class="run" data-id="env3dLights">Build</button></div><div class="tool"><div class="tool-icon">✦</div><div class="tool-info"><div class="tool-name">Neon Studio</div><div class="tool-desc">Full environment preset for fast cinematic setups.</div></div><button class="run" data-id="env3dNeon">Build</button></div></div></section>
+  </main>
+
+  <footer class="footer"><span>Motion Forge 2.2.0 • Expanded Motion Lab</span><span>by <b>LUNR</b></span></footer>
+</div>
+
+<div class="modal hidden" id="modal">
+  <div class="modalbox">
+    <div class="modalhead"><div><div class="ey">CONFIGURATION</div><h2>Motion Forge Settings</h2></div><button class="close" id="close">×</button></div>
+    <div class="setting"><span>Compact cards<small>Fit more presets in smaller docks.</small></span><input id="compact" type="checkbox"></div>
+    <div class="setting"><span>Animated previews<small>Turn card animations on or off.</small></span><input id="previews" type="checkbox" checked></div>
+    <div class="setting"><span>UI sound<small>Short synth blips on click, apply and boot.</small></span><input id="uiSound" type="checkbox" checked></div>
+    <div style="display:flex;justify-content:flex-end;gap:7px;margin-top:10px"><button class="danger" id="reset">Reset</button><button class="save" id="save">Save</button></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var SFX=(function(){
+  var ctx=null, enabled=localStorage.getItem("mfv2_sfx")!=="0";
+  function actx(){ if(!ctx){ try{ var C=window.AudioContext||window.webkitAudioContext; ctx=C?new C():null; }catch(e){ ctx=null; } } return ctx; }
+  function tone(freq,dur,type,vol,glideTo){
+    if(!enabled) return; var c=actx(); if(!c) return;
+    try{
+      var o=c.createOscillator(), g=c.createGain();
+      o.type=type||"sine"; o.frequency.setValueAtTime(freq,c.currentTime);
+      if(glideTo) o.frequency.exponentialRampToValueAtTime(glideTo,c.currentTime+dur);
+      g.gain.setValueAtTime(.001,c.currentTime);
+      g.gain.exponentialRampToValueAtTime(vol||.05,c.currentTime+.015);
+      g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+dur);
+      o.connect(g); g.connect(c.destination);
+      o.start(); o.stop(c.currentTime+dur+.03);
+    }catch(e){}
+  }
+  return {
+    click:function(){ tone(680,.05,"sine",.035); },
+    tab:function(){ tone(360,.05,"triangle",.03); },
+    apply:function(ok){ if(ok===false) tone(170,.2,"sawtooth",.045,110); else tone(560,.13,"sine",.05,940); },
+    favorite:function(added){ if(added){ tone(720,.05,"sine",.04,1080); } else { tone(520,.06,"sine",.035,300); } },
+    confirm:function(){ var c=actx(); if(!enabled||!c) return; tone(660,.07,"sine",.04); setTimeout(function(){tone(880,.1,"sine",.045)},70); },
+    setEnabled:function(v){ enabled=!!v; localStorage.setItem("mfv2_sfx",enabled?"1":"0"); },
+    isEnabled:function(){ return enabled; }
+  };
+})();
+var effects=[
+{id:"fx:blur",n:"Gaussian Blur",d:"Soft, adjustable blur",i:"◌",c:"Blur",a:"blur"},
+{id:"fx:boxblur",n:"Box Blur",d:"Fast, boxy blur",i:"▢",c:"Blur",a:"blur"},
+{id:"fx:lensblur",n:"Camera Lens Blur",d:"Depth-of-field style blur",i:"◎",c:"Blur",a:"blur"},
+{id:"fx:dirblur",n:"Directional Blur",d:"Motion-direction blur",i:"↗",c:"Blur",a:"streak"},
+{id:"fx:radialblur",n:"Radial Blur",d:"Zoom or spin blur",i:"◎",c:"Blur",a:"streak"},
+{id:"fx:sharpen",n:"Sharpen",d:"Crisp detail pass",i:"◆",c:"Blur",a:"pop"},
+{id:"fx:unsharp",n:"Unsharp Mask",d:"Detailed edge sharpening",i:"◇",c:"Blur",a:"pop"},
+{id:"fx:vecblur",n:"CC Vector Blur",d:"Edge-aware directional blur",i:"↔",c:"Blur",a:"streak"},
+{id:"fx:levels",n:"Levels",d:"Tonal range control",i:"▥",c:"Color",a:"colorshift"},
+{id:"fx:curves",n:"Curves",d:"Precise tonal curve",i:"⟀",c:"Color",a:"colorshift"},
+{id:"fx:colorbalance",n:"Color Balance",d:"Shadow/mid/highlight color",i:"◑",c:"Color",a:"colorshift"},
+{id:"fx:colorbalancehls",n:"Color Balance (HLS)",d:"Hue, lightness, saturation shift",i:"◐",c:"Color",a:"colorshift"},
+{id:"fx:huesat",n:"Hue / Saturation",d:"Color intensity and hue",i:"◉",c:"Color",a:"colorshift"},
+{id:"fx:vibrance",n:"Vibrance",d:"Smart saturation boost",i:"◍",c:"Color",a:"colorshift"},
+{id:"fx:bw",n:"Black & White",d:"Channel-weighted desaturation",i:"◻",c:"Color",a:"colorshift"},
+{id:"fx:photofilter",n:"Photo Filter",d:"Warming/cooling color filter",i:"◒",c:"Color",a:"colorshift"},
+{id:"fx:tint",n:"Tint",d:"Two-tone treatment",i:"◐",c:"Color",a:"colorshift"},
+{id:"fx:fill",n:"Fill",d:"Fast color fill",i:"●",c:"Color",a:"colorshift"},
+{id:"fx:tritone",n:"Tritone",d:"Three-tone color treatment",i:"◍",c:"Color",a:"colorshift"},
+{id:"fx:exposure",n:"Exposure",d:"Quick cinematic exposure control",i:"☼",c:"Color",a:"colorshift"},
+{id:"fx:bc",n:"Brightness / Contrast",d:"Instant tonal control",i:"◒",c:"Color",a:"colorshift"},
+{id:"fx:changecolor",n:"Change Color",d:"Retarget one color to another",i:"◇",c:"Color",a:"colorshift"},
+{id:"fx:changetocolor",n:"Change to Color",d:"Precise color-to-color remap",i:"◆",c:"Color",a:"colorshift"},
+{id:"fx:shadowhighlight",n:"Shadow / Highlight",d:"Recover shadow and highlight detail",i:"◓",c:"Color",a:"colorshift"},
+{id:"fx:lumetri",n:"Lumetri Color",d:"Full color-grade panel",i:"◈",c:"Color",a:"colorshift"},
+{id:"fx:glow",n:"Glow",d:"Native adjustable glow",i:"✦",c:"Stylize",a:"glow"},
+{id:"fx:mosaic",n:"Mosaic",d:"Pixelate the layer",i:"▦",c:"Stylize",a:"grain"},
+{id:"fx:findedges",n:"Find Edges",d:"Edge-outline treatment",i:"⌁",c:"Stylize",a:"grain"},
+{id:"fx:posterize",n:"Posterize",d:"Reduce tonal levels",i:"▤",c:"Stylize",a:"grain"},
+{id:"fx:noise",n:"Noise",d:"Film-like texture",i:"▦",c:"Stylize",a:"grain"},
+{id:"fx:scatter",n:"Scatter",d:"Pixel scatter / grit",i:"▧",c:"Stylize",a:"grain"},
+{id:"fx:threshold",n:"Threshold",d:"Hard black & white cutoff",i:"◼",c:"Stylize",a:"grain"},
+{id:"fx:coloremboss",n:"Color Emboss",d:"Embossed edge relief, in color",i:"◭",c:"Stylize",a:"grain"},
+{id:"fx:emboss",n:"Emboss",d:"Embossed edge relief",i:"◮",c:"Stylize",a:"grain"},
+{id:"fx:strobe",n:"Strobe Light",d:"Flashing strobe effect",i:"⚡",c:"Stylize",a:"jitter"},
+{id:"fx:ccglass",n:"CC Glass",d:"Glass-refraction displacement",i:"▣",c:"Stylize",a:"warp"},
+{id:"fx:wavewarp",n:"Wave Warp",d:"Animated wave distortion",i:"〰",c:"Distort",a:"warp"},
+{id:"fx:turbulence",n:"Turbulent Displace",d:"Organic liquid distortion",i:"≈",c:"Distort",a:"warp"},
+{id:"fx:displace",n:"Displacement Map",d:"Drive distortion from another layer",i:"▧",c:"Distort",a:"warp"},
+{id:"fx:bulge",n:"Bulge",d:"Spherical bulge distortion",i:"◉",c:"Distort",a:"warp"},
+{id:"fx:spherize",n:"Spherize",d:"Wrap onto a sphere",i:"◎",c:"Distort",a:"warp"},
+{id:"fx:cornerpin",n:"Corner Pin",d:"Pin all four corners",i:"◰",c:"Distort",a:"warp"},
+{id:"fx:meshwarp",n:"Mesh Warp",d:"Grid-based warp",i:"▦",c:"Distort",a:"warp"},
+{id:"fx:liquify",n:"Liquify",d:"Push/pull/twirl distortion",i:"≋",c:"Distort",a:"warp"},
+{id:"fx:opticscomp",n:"Optics Compensation",d:"Lens distortion / dewarp",i:"◉",c:"Distort",a:"warp"},
+{id:"fx:bendit",n:"CC Bend It",d:"Bend a region of the layer",i:"〜",c:"Distort",a:"warp"},
+{id:"fx:ripplepulse",n:"CC Ripple Pulse",d:"Native ripple pulse (no plugin)",i:"◉",c:"Distort",a:"warp"},
+{id:"fx:ramp",n:"Gradient Ramp",d:"Linear or radial gradient",i:"▥",c:"Generate",a:"colorshift"},
+{id:"fx:checkerboard",n:"Checkerboard",d:"Procedural checker pattern",i:"▦",c:"Generate",a:"grain"},
+{id:"fx:fractalnoise",n:"Fractal Noise",d:"Organic procedural noise",i:"≈",c:"Generate",a:"warp"},
+{id:"fx:grid",n:"Grid",d:"Procedural grid",i:"▦",c:"Generate",a:"grain"},
+{id:"fx:lensflare",n:"Lens Flare (native)",d:"Built-in lens flare — no plugin needed",i:"✦",c:"Generate",a:"glow"},
+{id:"fx:radiowaves",n:"Radio Waves",d:"Expanding ring waves",i:"◎",c:"Generate",a:"zoom"},
+{id:"fx:vegas",n:"Vegas",d:"Neon outline strokes",i:"✦",c:"Generate",a:"glow"},
+{id:"fx:writeon",n:"Write-on",d:"Hand-drawn reveal stroke",i:"✎",c:"Generate",a:"streak"},
+{id:"fx:circle",n:"Circle",d:"Procedural circle/ring",i:"◯",c:"Generate",a:"zoom"},
+{id:"fx:bevelalpha",n:"Bevel Alpha",d:"Beveled edge on alpha",i:"◭",c:"Perspective",a:"pop"},
+{id:"fx:beveledges",n:"Bevel Edges",d:"Beveled edge on the frame",i:"◮",c:"Perspective",a:"pop"},
+{id:"fx:dropshadow",n:"Drop Shadow",d:"Classic drop shadow",i:"◼",c:"Perspective",a:"glow"},
+{id:"fx:radialshadow",n:"Radial Shadow",d:"Point-light cast shadow",i:"◑",c:"Perspective",a:"glow"},
+{id:"fx:glasses3d",n:"3D Glasses",d:"Stereo 3D composite",i:"◐",c:"Perspective",a:"warp"},
+{id:"fx:echo",n:"Echo",d:"Layered time-echo trails",i:"◌",c:"Time",a:"streak"},
+{id:"fx:posterizetime",n:"Posterize Time",d:"Stepped frame rate",i:"▤",c:"Time",a:"jitter"},
+{id:"fx:timewarp",n:"Timewarp",d:"Smooth speed ramping",i:"◴",c:"Time",a:"streak"},
+{id:"fx:ccmotion",n:"CC Force Motion Blur",d:"Enhanced motion blur",i:"↔",c:"Time",a:"streak"},
+{id:"fx:linearwipe",n:"Linear Wipe",d:"Straight directional wipe",i:"▥",c:"Transition",a:"wipe"},
+{id:"fx:radialwipe",n:"Radial Wipe",d:"Clock-style radial wipe",i:"◔",c:"Transition",a:"wipe"},
+{id:"fx:venetian",n:"Venetian Blinds",d:"Slatted blinds reveal",i:"▤",c:"Transition",a:"wipe"},
+{id:"fx:blockdissolve",n:"Block Dissolve",d:"Blocky dissolve transition",i:"▦",c:"Transition",a:"grain"},
+{id:"fx:cardwipe",n:"Card Wipe",d:"Flipping card-grid transition",i:"▧",c:"Transition",a:"wipe"},
+{id:"fx:gradientwipe",n:"Gradient Wipe",d:"Wipe driven by a gradient map",i:"▥",c:"Transition",a:"wipe"},
+{id:"fx:iriswipe",n:"Iris Wipe",d:"Expanding/contracting iris",i:"◯",c:"Transition",a:"zoom"},
+{id:"fx:setmatte",n:"Set Matte",d:"Borrow alpha from another layer",i:"◰",c:"Channel",a:"grain"},
+{id:"fx:shiftchannels",n:"Shift Channels",d:"Remap RGBA channels",i:"◫",c:"Channel",a:"colorshift"},
+{id:"fx:invert",n:"Invert",d:"Invert color channels",i:"◆",c:"Channel",a:"colorshift"},
+{id:"fx:minimax",n:"Minimax",d:"Grow / shrink the matte",i:"◻",c:"Channel",a:"pop"},
+{id:"fx:twixtor",n:"Twixtor",d:"Optical-flow speed ramping — RE:Vision Effects",i:"◴",c:"Third-Party",a:"streak"},
+{id:"fx:particular",n:"Trapcode Particular",d:"3D particle systems — Red Giant",i:"✦",c:"Third-Party",a:"grain"},
+{id:"fx:form",n:"Trapcode Form",d:"3D particle grids/objects — Red Giant",i:"◈",c:"Third-Party",a:"grain"},
+{id:"fx:shine",n:"Trapcode Shine",d:"Volumetric light rays — Red Giant",i:"✦",c:"Third-Party",a:"glow"},
+{id:"fx:starglow",n:"Trapcode Starglow",d:"Multi-point star glints — Red Giant",i:"✦",c:"Third-Party",a:"glow"},
+{id:"fx:stroke3d",n:"Trapcode 3D Stroke",d:"Animated 3D line strokes — Red Giant",i:"〰",c:"Third-Party",a:"streak"},
+{id:"fx:soundkeys",n:"Trapcode Sound Keys",d:"Audio-reactive keyframes — Red Giant",i:"♪",c:"Third-Party",a:"jitter"},
+{id:"fx:opticalflares",n:"Optical Flares",d:"Lens flare system — Video Copilot",i:"✦",c:"Third-Party",a:"glow"},
+{id:"fx:saber",n:"Saber",d:"Glowing strokes & lightsabers — Video Copilot",i:"⚡",c:"Third-Party",a:"glow"},
+{id:"fx:magicbulletlooks",n:"Magic Bullet Looks",d:"Cinematic color looks — Red Giant",i:"◈",c:"Third-Party",a:"colorshift"},
+{id:"glowPulse",n:"Glow Pulse",d:"Animated glow with a custom curve",i:"✦",c:"Utility",a:"glow"},
+{id:"removeMFFX",n:"Remove MF FX",d:"Remove Motion Forge effects",i:"×",c:"Utility",a:"erase"}];
+var tools=[
+{id:"addSolid",n:"Solid",d:"Create a full-frame solid",i:"■"},
+{id:"addAdjustment",n:"Adjustment Layer",d:"Create a native adjustment layer",i:"◒"},
+{id:"duplicate",n:"Duplicate",d:"Duplicate selected layer(s)",i:"⧉"},
+{id:"precomp",n:"Pre-compose",d:"Pre-compose selected layers",i:"▣"},
+{id:"ease",n:"Ease Keyframes",d:"Apply smooth temporal easing",i:"⌁"},
+{id:"cameraWiggle",n:"Camera Wiggle",d:"Create or animate a camera with controlled shake",i:"◉"},
+{id:"cameraDrift",n:"Camera Drift",d:"Subtle cinematic position drift",i:"◌"},
+{id:"cameraPush",n:"Camera Push",d:"One-click dolly / zoom move",i:"↗"},
+{id:"maskRect",n:"Rectangle Mask",d:"Create a centered editable mask",i:"□"},
+{id:"maskEllipse",n:"Ellipse Mask",d:"Create a centered editable ellipse mask",i:"○"},
+{id:"stagger",n:"Stagger Layers",d:"Offset selected layers in time",i:"≋"},{id:"smartFit",n:"Smart Fit",d:"Fit selected layers to the comp safely",i:"⌗"},{id:"diagnostics",n:"System Diagnostics",d:"Check Motion Forge command routing",i:"✓"}];
+var motionEffects=[
+{id:"motion:elastic",n:"Elastic Bounce",d:"Springy scale settle with a tuned overshoot curve",c:"bounce",a:"bounce"},{id:"motion:swing",n:"Swing In",d:"Rotational swing with a smooth settle",c:"style",a:"rotate"},{id:"motion:slam",n:"Slam In",d:"Fast drop with scale compression and snap",c:"impact",a:"slide"},{id:"motion:pulse",n:"Pulse",d:"Subtle scale pulse with a polished ease",c:"pulse",a:"pop"},{id:"motion:spiral",n:"Spiral In",d:"Offset, rotation and scale entrance",c:"style",a:"rotate"},{id:"motion:float",n:"Float In",d:"Soft vertical float with relaxed timing",c:"in",a:"fade"},
+{id:"shakeTransition:impact",n:"Impact Shake",d:"Multi-keyframe shake transition with graph easing",c:"impact",a:"jitter"},{id:"shakeTransition:snap",n:"Snap Shake",d:"Short sharp camera-like impact",c:"style",a:"jitter"},{id:"shakeTransition:elastic",n:"Elastic Shake",d:"Overshoot shake transition",c:"bounce",a:"jitter"},
+{id:"apple:standard",n:"Apple Standard",d:"Clean restrained product-style entrance",c:"Apple Motion",a:"fade"},{id:"apple:smooth",n:"Apple Smooth",d:"Long soft ease with minimal movement",c:"Apple Motion",a:"fade"},{id:"apple:emphasized",n:"Apple Emphasized",d:"Confident fast entrance",c:"Apple Motion",a:"pop"},{id:"apple:soft",n:"Apple Soft",d:"Gentle low-energy motion",c:"Apple Motion",a:"fade"},{id:"apple:snap",n:"Apple Snap",d:"Fast snap-in with a controlled finish",c:"Apple Motion",a:"pop"},{id:"apple:bouncy",n:"Apple Bouncy",d:"Damped bounce without harsh overshoot",c:"Apple Motion",a:"bounce"},{id:"apple:anticipate",n:"Apple Anticipate",d:"Tiny reverse motion before launch",c:"Apple Motion",a:"rotate"},{id:"apple:spring",n:"Apple Spring",d:"Spring-inspired damped settle",c:"Apple Motion",a:"bounce"},{id:"apple:settle",n:"Apple Settle",d:"Quiet final settling motion",c:"Apple Motion",a:"fade"},{id:"apple:overshoot",n:"Apple Overshoot",d:"Small premium overshoot",c:"Apple Motion",a:"pop"},{id:"apple:float",n:"Apple Float",d:"Soft floating rise",c:"Apple Motion",a:"fade"},{id:"apple:lift",n:"Apple Lift",d:"Vertical lift with a clean finish",c:"Apple Motion",a:"slide"},{id:"apple:drift",n:"Apple Drift",d:"Slow ambient drift",c:"Apple Motion",a:"rotate"},{id:"apple:punch",n:"Apple Punch",d:"Short high-energy scale hit",c:"Apple Motion",a:"pop"},{id:"apple:reveal",n:"Apple Reveal",d:"Opacity plus lift reveal",c:"Apple Motion",a:"fade"},{id:"glass",n:"Liquid Glass",d:"Native blur, tint and soft reveal",c:"Glass",a:"blur"},
+{id:"glass",n:"Frosted Glass",d:"Soft translucent native glass treatment",c:"Glass",a:"blur"},{id:"apple:smooth",n:"Glass Text Base",d:"Smooth motion foundation for glass titles",c:"Glass",a:"text"}
+];
+var textAnimations=[
+{id:"fadeUp",n:"Fade Up",d:"Opacity and lift entrance",c:"in",a:"fade"},{id:"pop",n:"Pop In",d:"Elastic scale entrance",c:"in",a:"pop"},{id:"slideLeft",n:"Slide From Left",d:"Directional entrance",c:"in",a:"slide"},{id:"slideRight",n:"Slide From Right",d:"Directional entrance",c:"in",a:"slide"},{id:"zoom",n:"Zoom In",d:"Scale entrance",c:"in",a:"zoom"},{id:"rotate",n:"Rotate In",d:"Rotational settle",c:"in",a:"rotate"},{id:"blurReveal",n:"Blur Reveal",d:"Blur to sharp",c:"in",a:"blur"},{id:"textType",n:"Type On",d:"Character reveal",c:"character",a:"type"},{id:"textTracking",n:"Tracking Reveal",d:"Letter-spacing reveal",c:"character",a:"tracking"},{id:"textWipe",n:"Text Wipe",d:"Directional text reveal",c:"character",a:"wipe"},{id:"bounce",n:"Bounce In",d:"Overshoot settle",c:"in",a:"bounce"},{id:"textOut",n:"Fade Out",d:"Character fade out",c:"out",a:"fade"},{id:"textMagnetic",n:"Magnetic Reveal",d:"Springy tracking + lift with a custom curve",c:"character",a:"tracking"}
+];
+var transitions=[
+{id:"videoCrossfade",n:"Cross Dissolve",d:"Opacity fade transition",c:"fade",a:"fade"},
+{id:"videoWhip",n:"Whip Pan",d:"Fast directional motion transition",c:"slide",a:"slide"},
+{id:"videoWipe",n:"Video Wipe",d:"Linear wipe transition",c:"wipe",a:"wipe"},
+{id:"videoZoom",n:"Zoom Transition",d:"Scale-through transition",c:"zoom",a:"zoom"},
+{id:"videoSpin",n:"Spin Transition",d:"Rotational transition",c:"spin",a:"rotate"},
+{id:"videoLeft",n:"Slide Left",d:"Footage slide transition",c:"slide",a:"slide"},
+{id:"videoRight",n:"Slide Right",d:"Footage slide transition",c:"slide",a:"slide"},
+{id:"videoPushLeft",n:"Push Left",d:"Push transition",c:"push",a:"slide"},
+{id:"videoPushRight",n:"Push Right",d:"Push transition",c:"push",a:"slide"},
+{id:"transitionScale",n:"Scale Through",d:"Scale transition",c:"zoom",a:"zoom"},
+{id:"shakeTransition:impact",n:"Impact Shake",d:"Graphed impact shake transition",c:"shake",a:"jitter"},
+{id:"shakeTransition:snap",n:"Snap Shake",d:"Fast punchy shake transition",c:"shake",a:"jitter"},
+{id:"shakeTransition:elastic",n:"Elastic Shake",d:"Overshoot shake transition",c:"shake",a:"jitter"}
+];
+var cameraTools=[{id:"cameraWiggle",n:"Camera Wiggle",d:"Controlled handheld shake",i:"≋"},{id:"cameraDrift",n:"Camera Drift",d:"Slow cinematic movement",i:"◌"},{id:"cameraPush",n:"Camera Push",d:"Dolly forward move",i:"↗"},{id:"cameraOrbit",n:"Camera Orbit",d:"Smooth orbital camera move",i:"◉"}];
+var loopBackgrounds=[{id:"loop:Grid Pulse",n:"Grid Pulse",d:"Cinematic pulsing grid for 3D mograph",a:"zoom"},{id:"loop:Aurora",n:"Aurora",d:"Animated aurora-style wave background",a:"blur"},{id:"loop:God Rays",n:"God Rays",d:"Soft volumetric-light style background",a:"fade"},{id:"loop:Fractal Space",n:"Fractal Space",d:"Deep procedural fractal texture",a:"zoom"},{id:"loop:Hologram",n:"Hologram",d:"Scanline sci-fi holographic background",a:"slide"},{id:"loop:CRT",n:"CRT",d:"Pixel-grid screen texture",a:"rotate"},{id:"loop:Halftone",n:"Halftone",d:"Procedural print-style dot field",a:"zoom"},{id:"loop:Chromatic",n:"Chromatic",d:"Subtle chromatic motion texture",a:"rotate"},{id:"loop:Long Gradient",n:"Long Gradient",d:"Slow-moving graphic gradient field",a:"slide"},{id:"loop:Pixel Flow",n:"Pixel Flow",d:"Animated pixelated motion field",a:"zoom"},{id:"loop:Liquid Warp",n:"Liquid Warp",d:"Organic turbulent background",a:"blur"},{id:"loop:Noise Film",n:"Film Grain",d:"Subtle animated film texture",a:"fade"}];
+var bundledOverlays=[
+{id:"overlay:0714_2 (1).mp4",n:"0714 2",file:"0714_2 (1).mp4"},
+{id:"overlay:No_Signal_Effect.mov",n:"No Signal Effect",file:"No_Signal_Effect.mov"},
+{id:"overlay:Vibrant_Video_Overlays_and_Dynamic_Sound_Effects-_Elevate_Your_Content_Creation.mp4",n:"Vibrant Video Overlays And Dynamic Sound Effects",file:"Vibrant_Video_Overlays_and_Dynamic_Sound_Effects-_Elevate_Your_Content_Creation.mp4"},
+{id:"overlay:fire overlay for edits.mp4",n:"Fire Overlay For Edits",file:"fire overlay for edits.mp4"},
+{id:"overlay:overlay 1.mp4",n:"Overlay 1",file:"overlay 1.mp4"},
+{id:"overlay:overlay 2.mp4",n:"Overlay 2",file:"overlay 2.mp4"},
+{id:"overlay:overlay 3.mp4",n:"Overlay 3",file:"overlay 3.mp4"},
+{id:"overlay:overlay 4.mp4",n:"Overlay 4",file:"overlay 4.mp4"},
+{id:"overlay:ripple black screen.mov",n:"Ripple Black Screen",file:"ripple black screen.mov"}
+];
+var bundledSFX=[
+{id:"sfxfile:fire whoosh 2.wav",n:"Fire Whoosh 2",file:"fire whoosh 2.wav"},
+{id:"sfxfile:for fire outroWHOOSESH (1).mp3",n:"For Fire OutroWHOOSESH",file:"for fire outroWHOOSESH (1).mp3"},
+{id:"sfxfile:glitch (1).wav",n:"Glitch",file:"glitch (1).wav"},
+{id:"sfxfile:glitch.1.mp3",n:"Glitch.1",file:"glitch.1.mp3"},
+{id:"sfxfile:impact.wav",n:"Impact",file:"impact.wav"},
+{id:"sfxfile:rocket woosh.1.wav",n:"Rocket Woosh.1",file:"rocket woosh.1.wav"},
+{id:"sfxfile:rocket woosh.2.mp3",n:"Rocket Woosh.2",file:"rocket woosh.2.mp3"},
+{id:"sfxfile:woosh.1.wav",n:"Woosh.1",file:"woosh.1.wav"},
+{id:"sfxfile:woosh.2.mp3",n:"Woosh.2",file:"woosh.2.mp3"},
+{id:"sfxfile:woosh.3.mp3",n:"Woosh.3",file:"woosh.3.mp3"},
+{id:"sfxfile:woosh.4.wav",n:"Woosh.4",file:"woosh.4.wav"}
+];
+var EXPECTED_HOST_VERSION="2.2.0";
+var fav=JSON.parse(localStorage.getItem("mfv2_fav")||"[]"), filter="all", q=document.getElementById("q"), textFilter="all", transFilter="all";
+
+function bridge(){
+  if(window.__adobe_cep__ && window.__adobe_cep__.evalScript) return window.__adobe_cep__;
+  return null;
+}
+function host(cmd,cb){
+  if(!cmd){notice("No command selected.",true);if(cb)cb({ok:false,message:"No command selected."});return;}
+  var b=bridge();
+  if(!b){notice("Preview mode: open this panel inside After Effects to run commands.",true);if(cb)cb({ok:false});return;}
+  setStatus("WORKING");
+  try{b.evalScript('MotionForgeCommand('+JSON.stringify(cmd)+')',function(raw){
+    var r;try{r=JSON.parse(raw)}catch(e){r={ok:false,message:String(raw||"Host returned an invalid response.")};}
+    setStatus("READY");notice(r.message||"Done.",!r.ok);SFX.apply(r.ok);if(cb)cb(r);
+  })}catch(e){setStatus("READY");notice(e.message,true);SFX.apply(false)}
+}
+function setStatus(s){document.getElementById("status").textContent=s;var d=document.getElementById("dot");d.style.background=s==="READY"?"var(--accent)":"var(--purple)";d.style.boxShadow=s==="READY"?"0 0 10px rgba(233,255,88,.55)":"0 0 10px rgba(139,125,255,.55)"}
+function notice(t,err){var n=document.getElementById("notice");n.textContent=t;n.className="notice"+(err?" error":"");n.style.display="block";clearTimeout(notice.t);notice.t=setTimeout(function(){n.style.display="none"},2800)}
+function htmlCard(x,star){
+return '<article class="card" data-id="'+x.id+'"><span class="star '+(fav.indexOf(x.id)>=0?"on":"")+'">★</span><div class="preview '+(x.a||"")+'"><span class="shape"></span></div><h3>'+x.n+'</h3><p>'+x.d+'</p><button class="apply">→</button></article>';
+}
+function renderCards(arr,target,countId,category){var term=q.value.toLowerCase(),f=category||"all";var out=arr.filter(function(x){return (f==="all"||x.c===f)&&(x.n+" "+x.d).toLowerCase().indexOf(term)>=0});document.getElementById(target).innerHTML=out.map(function(x){return htmlCard(x)}).join("");if(countId)document.getElementById(countId).textContent=out.length+" / "+arr.length;bind(document.getElementById(target));}
+function renderText(){renderCards(textAnimations,"textgrid","textCount",textFilter)}
+function renderTransitions(){renderCards(transitions,"transitiongrid","transitionCount",transFilter)}
+function renderMotion(){renderCards(motionEffects,"motiongrid","motionCount","all")}
+function renderLoops(){
+  var box=document.getElementById("loopgrid");if(!box)return;
+  var proc=loopBackgrounds.map(function(x){return '<article class="card" data-id="'+x.id+'"><div class="preview '+(x.a||"")+'"><span class="shape"></span></div><h3>'+x.n+'</h3><p>'+x.d+'</p><button class="apply">→</button></article>';}).join("");
+  box.innerHTML=proc;bind(box);
+  var obox=document.getElementById("overlaygrid");
+  if(obox){
+    obox.innerHTML=bundledOverlays.map(function(x){var src='assets/overlays/'+encodeURI(x.file);return '<article class="card video-card" data-id="'+x.id+'"><div class="preview"><video class="bgvideo" muted loop autoplay playsinline preload="metadata" src="'+src+'"></video></div><h3>▣ '+escapeHtml(x.n)+'</h3><p>Overlay clip • one-click add</p><button class="apply">→</button></article>';}).join("");
+    bind(obox);
+    var oc=document.getElementById("overlayCount"); if(oc) oc.textContent=bundledOverlays.length+" clips";
+  }
+}
+function renderBundledSFX(){
+  var box=document.getElementById("bundledSfxGrid"); if(!box) return;
+  box.innerHTML=bundledSFX.map(function(x){return '<div class="tool"><div class="tool-icon">♪</div><div class="tool-info"><div class="tool-name">'+escapeHtml(x.n)+'</div><div class="tool-desc">Bundled clip • adds at the playhead</div></div><button class="run" data-id="'+x.id+'">Add</button></div>';}).join("");
+  Array.prototype.forEach.call(box.querySelectorAll(".run"),function(b){b.onclick=function(){SFX.click();host(b.getAttribute("data-id"))}});
+  var c=document.getElementById("bundledSfxCount"); if(c) c.textContent=bundledSFX.length+" clips";
+}
+function renderCamera(){document.getElementById("cameratools").innerHTML=cameraTools.map(function(x){return '<div class="camera-card"><div class="camicon">'+x.i+'</div><div class="camcopy"><b>'+x.n+'</b><p>'+x.d+'</p></div><button data-id="'+x.id+'">Apply</button></div>'}).join("");Array.prototype.forEach.call(document.querySelectorAll("#cameratools button"),function(b){b.onclick=function(){SFX.click();host(b.getAttribute("data-id"))}})}
+function renderFonts(){var box=document.getElementById("fontresults"),raw=document.getElementById("fontQueries").value.trim();var qs=raw?raw.split(/[,;\n]+/).map(function(x){return x.trim()}).filter(Boolean):["popular fonts"];var free=document.getElementById("fontFree").checked;var base="https://www.dafont.com/search.php?q=";var filterPart=free?"&l[]=10&l[]=1":"";document.getElementById("fontDafont").href=base+encodeURIComponent(qs.join(" "))+filterPart;box.innerHTML=qs.map(function(term){var url=base+encodeURIComponent(term)+filterPart;return '<div class="fontresult"><div style="flex:1;min-width:150px"><div class="fontpreview">'+escapeHtml(term)+' — Aa Bb 123</div><div class="fontmeta">DaFont search • review the author license before installing</div></div><div class="fontactions"><button class="fontopen" data-font="'+escapeHtml(term)+'">Apply</button><a class="fontopen" target="_blank" href="'+url+'">Get</a></div></div>';}).join("");document.getElementById("fontCount").textContent=qs.length+" searches";Array.prototype.forEach.call(document.querySelectorAll(".fontopen[data-font]"),function(b){b.onclick=function(){host("applyFont:"+b.getAttribute("data-font"))}})}
+function escapeHtml(x){return String(x).replace(/[&<>"]/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]})}
+var fxfilter="all";
+function renderEffects(){
+var term=q.value.toLowerCase(),arr=effects.filter(function(x){
+return (fxfilter==="all"||x.c===fxfilter)&&(x.n+" "+x.d+" "+x.c).toLowerCase().indexOf(term)>=0;
+});
+document.getElementById("fxgrid").innerHTML=arr.map(function(x){
+return '<article class="card" data-id="'+x.id+'" data-cat="'+x.c+'"><span class="ey" style="position:absolute;left:9px;bottom:9px;z-index:2">'+x.c.toUpperCase()+'</span><div class="preview '+(x.a||"")+'"><span class="shape"></span></div><h3>'+x.i+"  "+x.n+'</h3><p>'+x.d+'</p><button class="apply">→</button></article>'
+}).join("");
+document.getElementById("fxcount").textContent=arr.length+" FX";
+bind(document.getElementById("fxgrid"));
+applyFxAvail();
+}
+var fxAvail=null,fxChecked=false,fxChecking=false;
+function applyFxAvail(){
+  if(!fxAvail)return;
+  Array.prototype.forEach.call(document.querySelectorAll("#fxgrid .card"),function(c){
+    var fid=c.getAttribute("data-id"); if(fid.indexOf("fx:")!==0) return;
+    var short=fid.substring(3), known=Object.prototype.hasOwnProperty.call(fxAvail,short);
+    if(!known) return;
+    var isThirdParty = c.getAttribute("data-cat")==="Third-Party";
+    if(fxAvail[short]===false){ if(isThirdParty){ c.style.display="none"; } else { c.classList.add("na"); c.title="Not detected in this After Effects install"; } }
+  });
+  var vis=document.querySelectorAll("#fxgrid .card:not([style*='display: none'])").length;
+  var cnt=document.getElementById("fxcount"); if(cnt) cnt.textContent=vis+" FX";
+}
+function checkFx(){
+  if(fxChecked||fxChecking)return;fxChecking=true;
+  host("checkEffects",function(r){fxChecking=false;fxChecked=true;if(r&&r.ok&&r.data&&r.data.available){fxAvail=r.data.available;applyFxAvail()}});
+}
+function renderTools(){
+var term=q.value.toLowerCase(),arr=tools.filter(function(x){return(x.n+" "+x.d).toLowerCase().indexOf(term)>=0});
+document.getElementById("toolgrid").innerHTML=arr.map(function(x){return '<div class="tool"><div class="tool-icon">'+x.i+'</div><div class="tool-info"><div class="tool-name">'+x.n+'</div><div class="tool-desc">'+x.d+'</div></div><button class="run" data-id="'+x.id+'">Run</button></div>'}).join("");
+Array.prototype.forEach.call(document.querySelectorAll(".run[data-id]"),function(b){b.onclick=function(){SFX.click();host(b.getAttribute("data-id"))}});
+}
+function renderFav(){
+var all=textAnimations.concat(motionEffects,transitions,effects,tools),arr=fav.map(function(id){for(var i=0;i<all.length;i++)if(all[i].id===id)return all[i]}).filter(Boolean);
+document.getElementById("libraryEmpty").style.display=arr.length?"none":"block";
+document.getElementById("favorites").innerHTML=arr.map(function(x){return '<div class="tool"><div class="tool-info"><div class="tool-name">★ '+x.n+'</div><div class="tool-desc">'+x.d+'</div></div><button class="run" data-id="'+x.id+'">Run</button></div>'}).join("");
+Array.prototype.forEach.call(document.querySelectorAll("#favorites .run"),function(b){b.onclick=function(){SFX.click();host(b.getAttribute("data-id"))}});
+}
+function flashCard(el){ if(!el) return; el.classList.remove("zap"); void el.offsetWidth; el.classList.add("zap"); setTimeout(function(){el.classList.remove("zap")},450); }
+function bind(root){
+Array.prototype.forEach.call(root.querySelectorAll(".card"),function(c){
+var id=c.getAttribute("data-id"),apply=c.querySelector(".apply"),star=c.querySelector(".star");
+apply.onclick=function(e){e.stopPropagation();SFX.click();flashCard(c);host(id)};
+if(star)star.onclick=function(e){e.stopPropagation();SFX.click();toggleFav(id)};
+c.onclick=function(e){if(e.target===apply||e.target===star)return;SFX.click();flashCard(c);host(id)};
+})}
+function toggleFav(id){var i=fav.indexOf(id);var added=i<0;if(i>=0)fav.splice(i,1);else fav.push(id);localStorage.setItem("mfv2_fav",JSON.stringify(fav));SFX.favorite(added);renderFav();Array.prototype.forEach.call(document.querySelectorAll('.star'),function(s){var card=s.closest(".card");if(card)s.classList.toggle("on",fav.indexOf(card.getAttribute("data-id"))>=0)})}
+function initGraph(){
+  var canvas=document.getElementById("curve");
+  if(!canvas)return;
+  if(canvas.__mfGraphReady){
+    requestAnimationFrame(function(){canvas.__mfGraphResize&&canvas.__mfGraphResize();});
+    return;
+  }
+  canvas.__mfGraphReady=true;
+  var ctx=canvas.getContext("2d"),dpr=window.devicePixelRatio||1;
+  var x1=.25,y1=.10,x2=.25,y2=1,drag=null,raf=0;
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+  function dims(){var w=Math.max(320,canvas.clientWidth||520),h=Math.max(240,canvas.clientHeight||300);return {w:w,h:h,p:38}}
+  function xy(px,py){var d=dims();return [d.p+px*(d.w-2*d.p),d.h-d.p-py*(d.h-2*d.p)]}
+  function resize(){var r=canvas.getBoundingClientRect(),w=Math.max(320,r.width||520),h=Math.max(240,r.height||300);dpr=window.devicePixelRatio||1;canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
+  canvas.__mfGraphResize=resize;
+  function preset(n){
+    if(n==="linear"){x1=0;y1=0;x2=1;y2=1}
+    else if(n==="ease"){x1=.25;y1=.10;x2=.25;y2=1}
+    else if(n==="in"){x1=.55;y1=.00;x2=1;y2=.45}
+    else if(n==="out"){x1=0;y1=.55;x2=.45;y2=1}
+    else if(n==="overshoot"){x1=.18;y1=1.12;x2=.24;y2=.98}
+    else if(n==="anticipate"){x1=.38;y1=-.20;x2=.75;y2=1.18}
+    document.querySelectorAll('.graphpreset').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-curve')===n)});
+    draw();readout();
+  }
+  function bez(t){var mt=1-t;return mt*mt*mt*0+3*mt*mt*t*y1+3*mt*t*t*y2+t*t*t}
+  function draw(){
+    var d=dims(),w=d.w,h=d.h,p=d.p;ctx.clearRect(0,0,w,h);
+    var bg=ctx.createLinearGradient(0,0,w,h);bg.addColorStop(0,'#10161e');bg.addColorStop(1,'#090c10');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+    // glow behind curve
+    ctx.save();ctx.shadowColor='rgba(233,255,88,.28)';ctx.shadowBlur=16;
+    // grid
+    ctx.shadowBlur=0;ctx.strokeStyle='rgba(110,123,140,.14)';ctx.lineWidth=1;
+    for(var i=0;i<=10;i++){var gx=p+i*(w-2*p)/10,gy=p+i*(h-2*p)/10;ctx.beginPath();ctx.moveTo(gx,p);ctx.lineTo(gx,h-p);ctx.stroke();ctx.beginPath();ctx.moveTo(p,gy);ctx.lineTo(w-p,gy);ctx.stroke()}
+    // axes + labels
+    ctx.strokeStyle='rgba(154,164,177,.35)';ctx.beginPath();ctx.moveTo(p,h-p);ctx.lineTo(w-p,h-p);ctx.moveTo(p,p);ctx.lineTo(p,h-p);ctx.stroke();
+    ctx.fillStyle='#65707d';ctx.font='9px Segoe UI, Arial';ctx.fillText('TIME',w-p-28,h-9);ctx.save();ctx.translate(12,p+28);ctx.rotate(-Math.PI/2);ctx.fillText('VALUE',0,0);ctx.restore();
+    ctx.fillStyle='#596473';ctx.fillText('0%',p-4,h-p+17);ctx.fillText('100%',p-9,p-8);ctx.fillText('0%',p-3,h-p+17);ctx.fillText('100%',w-p-22,h-p+17);
+    // fill under curve
+    var a=xy(0,0),e=xy(1,1),b=xy(x1,y1),c=xy(x2,y2);
+    ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.bezierCurveTo(b[0],b[1],c[0],c[1],e[0],e[1]);ctx.lineTo(e[0],h-p);ctx.lineTo(a[0],h-p);ctx.closePath();ctx.fillStyle='rgba(233,255,88,.055)';ctx.fill();
+    // handles
+    ctx.strokeStyle='rgba(139,125,255,.7)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.moveTo(e[0],e[1]);ctx.lineTo(c[0],c[1]);ctx.stroke();
+    // curve
+    ctx.save();ctx.shadowColor='rgba(233,255,88,.42)';ctx.shadowBlur=14;ctx.strokeStyle='#e9ff58';ctx.lineWidth=3.5;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.bezierCurveTo(b[0],b[1],c[0],c[1],e[0],e[1]);ctx.stroke();ctx.restore();
+    // endpoints and handles
+    [[b,'A'],[c,'B']].forEach(function(item){var pt=item[0],lab=item[1];ctx.fillStyle='#8b7dff';ctx.beginPath();ctx.arc(pt[0],pt[1],7,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#f5f7fa';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle='#0b0d10';ctx.font='bold 8px Segoe UI';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(lab,pt[0],pt[1]);ctx.textAlign='start';ctx.textBaseline='alphabetic'});
+    // animated playhead / sample dot
+    var t=(performance.now()%1800)/1800,yy=bez(t),pt=xy(t,yy);ctx.fillStyle='#fff';ctx.shadowColor='#e9ff58';ctx.shadowBlur=10;ctx.beginPath();ctx.arc(pt[0],pt[1],4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    ctx.restore();raf=requestAnimationFrame(draw);
+  }
+  function readout(){document.getElementById('curveReadout').textContent='Cubic Bézier  '+[x1,y1,x2,y2].map(function(v){return Number(v).toFixed(2)}).join('   ')}
+  function hit(mx,my){var pts=[[x1,y1,'a'],[x2,y2,'b']];for(var i=0;i<pts.length;i++){var pt=xy(pts[i][0],pts[i][1]);if(Math.hypot(mx-pt[0],my-pt[1])<16)return pts[i][2]}return null}
+  function pointer(e){var r=canvas.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]}
+  canvas.addEventListener('pointerdown',function(e){var q=pointer(e);drag=hit(q[0],q[1]);if(drag){canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId);e.preventDefault()}});
+  canvas.addEventListener('pointermove',function(e){if(!drag)return;var q=pointer(e),d=dims(),xx=clamp((q[0]-d.p)/(d.w-2*d.p),0,1),yy=clamp(1-(q[1]-d.p)/(d.h-2*d.p),-1.5,2);if(drag==='a'){x1=xx;y1=yy}else{x2=xx;y2=yy}document.querySelectorAll('.graphpreset').forEach(function(b){b.classList.remove('active')});readout()});
+  canvas.addEventListener('pointerup',function(e){drag=null;try{canvas.releasePointerCapture&&canvas.releasePointerCapture(e.pointerId)}catch(_){} });
+  Array.prototype.forEach.call(document.querySelectorAll('.graphpreset'),function(b){b.onclick=function(){preset(b.getAttribute('data-curve'))}});
+  function loadCustomPresets(){ try{ return JSON.parse(localStorage.getItem("mfv2_curvePresets")||"[]"); }catch(e){ return []; } }
+  function saveCustomPresets(arr){ try{ localStorage.setItem("mfv2_curvePresets",JSON.stringify(arr)); }catch(e){} }
+  function renderCustomPresets(){
+    var row=document.getElementById("customCurveRow"), arr=loadCustomPresets();
+    if(!row)return;
+    row.innerHTML = arr.length ? arr.map(function(p,i){return '<button class="graphpreset" data-custom="'+i+'">'+escapeHtml(p.name)+' <span class="curve-del" data-del="'+i+'">×</span></button>';}).join("") : '<span class="tool-desc" style="padding:4px 2px">No saved curves yet — dial one in above and press Save.</span>';
+    Array.prototype.forEach.call(row.querySelectorAll('[data-custom]'),function(b){
+      b.onclick=function(e){
+        if(e.target&&e.target.getAttribute('data-del')!==null) return;
+        var i=Number(b.getAttribute('data-custom')), p=arr[i]; if(!p)return;
+        SFX.tab(); x1=p.x1;y1=p.y1;x2=p.x2;y2=p.y2;
+        document.querySelectorAll('.graphpreset').forEach(function(x){x.classList.remove('active')});
+        draw();readout();
+      };
+    });
+    Array.prototype.forEach.call(row.querySelectorAll('[data-del]'),function(x){
+      x.onclick=function(ev){ ev.stopPropagation(); var i=Number(x.getAttribute('data-del')); arr.splice(i,1); saveCustomPresets(arr); renderCustomPresets(); };
+    });
+  }
+  var saveBtn=document.getElementById("saveCurvePreset");
+  if(saveBtn) saveBtn.onclick=function(){
+    SFX.click();
+    var nameInput=document.getElementById("curvePresetName"), nm=nameInput.value.trim()||("Curve "+(loadCustomPresets().length+1));
+    var arr=loadCustomPresets(); arr.push({name:nm,x1:x1,y1:y1,x2:x2,y2:y2}); saveCustomPresets(arr);
+    nameInput.value=""; renderCustomPresets(); notice("Saved curve \""+nm+"\".");
+  };
+  renderCustomPresets();
+  document.getElementById('applyCurve').onclick=function(){host('graph:'+[x1,y1,x2,y2].join(','))}; var smart=document.getElementById('smartCurve'); if(smart) smart.onclick=function(){x1=.22;y1=.05;x2=.18;y2=1;draw();readout();host('graph:'+[x1,y1,x2,y2].join(','));};
+  window.addEventListener('resize',resize);preset('ease');requestAnimationFrame(resize);
+}
+function active(){var x=document.querySelector(".tab.active").getAttribute("data-tab");if(x==="text")renderText();if(x==="motion")renderMotion();if(x==="transitions")renderTransitions();if(x==="effects"){renderEffects();checkFx()}if(x==="tools")renderTools();if(x==="graph")initGraph();if(x==="camera")renderCamera();if(x==="fonts")renderFonts();if(x==="special"){}if(x==="sfx")renderBundledSFX();if(x==="env3d"){}if(x==="loops")renderLoops();if(x==="library")renderFav()}
+Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(b){b.onclick=function(){SFX.tab();Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(x){x.classList.remove("active")});b.classList.add("active");Array.prototype.forEach.call(document.querySelectorAll(".panel"),function(x){x.classList.remove("active")});document.getElementById(b.getAttribute("data-tab")).classList.add("active");active()}});
+Array.prototype.forEach.call(document.querySelectorAll("#textchips .chip"),function(b){b.onclick=function(){Array.prototype.forEach.call(document.querySelectorAll("#textchips .chip"),function(x){x.classList.remove("active")});b.classList.add("active");textFilter=b.getAttribute("data-tcat");renderText()}});
+Array.prototype.forEach.call(document.querySelectorAll("#transchips .chip"),function(b){b.onclick=function(){Array.prototype.forEach.call(document.querySelectorAll("#transchips .chip"),function(x){x.classList.remove("active")});b.classList.add("active");transFilter=b.getAttribute("data-tcat");renderTransitions()}});
+document.getElementById("fontSearchBtn").onclick=renderFonts;document.getElementById("fontQueries").addEventListener("keydown",function(e){if(e.key==="Enter")renderFonts()});document.getElementById("fontFree").onchange=renderFonts;
+(function(){
+  var kind="notif", chips=document.querySelectorAll("#applekinds .chip"), sender=document.getElementById("appleSender");
+  Array.prototype.forEach.call(chips,function(b){b.onclick=function(){SFX.tab();Array.prototype.forEach.call(chips,function(x){x.classList.remove("active")});b.classList.add("active");kind=b.getAttribute("data-kind");sender.style.display=(kind==="notif")?"block":"none"}});
+  document.getElementById("appleApply").onclick=function(){SFX.click();
+    var p={kind:kind,sender:sender.value.trim(),text:document.getElementById("appleText").value.trim(),animate:document.getElementById("appleAnim").checked,sfPro:document.getElementById("appleSF").checked,deepGlow:document.getElementById("appleGlow").checked};
+    host("appleUI:"+JSON.stringify(p));
+  };
+})();
+document.getElementById("beatRun").onclick=function(){SFX.click();host("autoBeat")};
+(function(){
+  var btn=document.getElementById("textComposerBtn"),input=document.getElementById("textInput"),tgl=document.getElementById("text3DToggle");
+  function run(){
+    SFX.click();
+    var payload={text:input.value.trim()||"Motion Forge",is3D:!!tgl.checked};
+    host("addTextAdvanced:"+JSON.stringify(payload));
+  }
+  btn.onclick=run;
+  input.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();run()}});
+  var scriptBtn=document.getElementById("scriptRunBtn");
+  if(scriptBtn) scriptBtn.onclick=function(){SFX.click();var code=document.getElementById("scriptInput").value;if(!code.trim()){notice("Paste some ExtendScript first.",true);return}host("runScript:"+JSON.stringify({code:code}))};
+  var audioBtn=document.getElementById("audioAttachBtn");
+  if(audioBtn) audioBtn.onclick=function(){SFX.click();host("attachAudio")};
+  var imgTplBtn=document.getElementById("imgTplBtn");
+  if(imgTplBtn) imgTplBtn.onclick=function(){SFX.click();
+    var p={text:document.getElementById("imgTplText").value.trim(),addText:document.getElementById("imgTplAddText").checked,animate:document.getElementById("imgTplAnimate").checked,precompose:document.getElementById("imgTplPrecompose").checked,matte:document.getElementById("imgTplMatte").checked};
+    host("imageTemplate:"+JSON.stringify(p));
+  };
+  var frameBtn=document.getElementById("frameSelectedBtn");
+  if(frameBtn) frameBtn.onclick=function(){SFX.click();setSlot("B")};
+  function setSlot(w){host(w==="A"?"setSlotA":"setSlotB",function(r){if(r&&r.ok&&r.data&&r.data.layer){var el=document.getElementById(w==="A"?"slotALabel":"slotBLabel");if(el)el.textContent=(w==="A"?"Slot 1: ":"Slot 2: ")+r.data.layer}})}
+  document.getElementById("slotABtn").onclick=function(){SFX.click();setSlot("A")};
+  document.getElementById("slotBBtn").onclick=function(){SFX.click();setSlot("B")};
+  document.getElementById("rigJumpBtn").onclick=function(){SFX.click();host("rigJump")};
+  document.getElementById("rigClearBtn").onclick=function(){SFX.click();host("clearSlots",function(){document.getElementById("slotALabel").textContent="Rig Null — the Null your camera is parented to";document.getElementById("slotBLabel").textContent="Destination — text, image or any layer"})};
+})();
+Array.prototype.forEach.call(document.querySelectorAll("#special button[data-id],#env3d button[data-id],#sfx button[data-id]"),function(b){b.onclick=function(e){if(e)e.stopPropagation();SFX.click();host(b.getAttribute("data-id"))}});Array.prototype.forEach.call(document.querySelectorAll("#sfx button[data-sfx-url]"),function(b){b.onclick=function(e){if(e)e.stopPropagation();var u=b.getAttribute("data-sfx-url");try{if(window.cep&&window.cep.util&&window.cep.util.openURLInDefaultBrowser){window.cep.util.openURLInDefaultBrowser(u);notice("SFX pack opened in your browser.")}else{window.open(u,"_blank");notice("SFX pack opened in your browser.")}}catch(err){notice("Could not open the SFX pack. Copy the source link from the button.",true)}}});
+Array.prototype.forEach.call(document.querySelectorAll("#fxchips .chip"),function(b){b.onclick=function(){SFX.tab();Array.prototype.forEach.call(document.querySelectorAll("#fxchips .chip"),function(x){x.classList.remove("active")});b.classList.add("active");fxfilter=b.getAttribute("data-fxfilter");renderEffects()}});
+(function(){
+  var extra=[];
+  function idx(){
+    var out=[];
+    function add(arr,src,map){arr.forEach(function(x){var it=map?map(x):x;if(it&&it.id)out.push({id:it.id,n:it.n,d:(it.d||""),src:src})})}
+    add(textAnimations,"Text");add(motionEffects,"Motion");add(transitions,"Transitions");add(effects,"Effects");add(tools,"Tools");add(cameraTools,"Camera");add(loopBackgrounds,"Backgrounds");
+    add(bundledOverlays,"Overlays",function(x){return{id:x.id,n:x.n,d:"Overlay clip"}});
+    add(bundledSFX,"SFX",function(x){return{id:x.id,n:x.n,d:"Sound effect"}});
+    Array.prototype.forEach.call(document.querySelectorAll("#special button[data-id],#env3d button[data-id],#sfx > .tool button[data-id]"),function(b){var box=b.closest(".special,.tool,.env3dcard,div");var t=box?(box.querySelector("h3,.tool-name,b")||{}).textContent:b.getAttribute("data-id");out.push({id:b.getAttribute("data-id"),n:(t||b.getAttribute("data-id")).trim(),d:"Signature tool",src:"Special / 3D"})});
+    return out;
+  }
+  window.__mfSearch=function(){
+    var term=q.value.trim().toLowerCase();
+    if(!term){document.body.classList.remove("searching");active();return}
+    var words=term.split(/\s+/),res=idx().filter(function(x){var hay=(x.n+" "+x.d+" "+x.src+" "+x.id).toLowerCase();return words.every(function(w){return hay.indexOf(w)>=0})});
+    var box=document.getElementById("searchgrid");
+    box.innerHTML=res.slice(0,120).map(function(x){return '<div class="tool"><div class="tool-icon">⌕</div><div class="tool-info"><div class="tool-name">'+escapeHtml(x.n)+'</div><div class="tool-desc">'+escapeHtml(x.src)+(x.d?' • '+escapeHtml(x.d):'')+'</div></div><button class="run" data-sid="'+escapeHtml(x.id)+'">Apply</button></div>'}).join("")||'<div class="tool-desc" style="padding:14px">Nothing matches "'+escapeHtml(term)+'".</div>';
+    document.getElementById("searchCount").textContent=res.length+" found";
+    Array.prototype.forEach.call(box.querySelectorAll("button[data-sid]"),function(b){b.onclick=function(){SFX.click();host(b.getAttribute("data-sid"))}});
+    document.body.classList.add("searching");
+  };
+})();
+q.oninput=window.__mfSearch;
+document.addEventListener("keydown",function(e){if(e.key==="/"&&document.activeElement!==q){e.preventDefault();q.focus()}if(e.shiftKey&&e.code==="Space"){e.preventDefault();q.focus()}});
+document.getElementById("refresh").onclick=function(){host("info",function(r){if(r.data&&r.data.ae)document.getElementById("ae").textContent="AE "+r.data.ae})};
+document.getElementById("settings").onclick=function(){document.getElementById("modal").classList.remove("hidden")};
+document.getElementById("close").onclick=function(){document.getElementById("modal").classList.add("hidden")};
+document.getElementById("save").onclick=function(){localStorage.setItem("mfv2_compact",document.getElementById("compact").checked?"1":"0");localStorage.setItem("mfv2_preview",document.getElementById("previews").checked?"1":"0");SFX.setEnabled(document.getElementById("uiSound").checked);document.getElementById("modal").classList.add("hidden");SFX.confirm();notice("Settings saved.")};
+document.getElementById("reset").onclick=function(){localStorage.removeItem("mfv2_compact");localStorage.removeItem("mfv2_preview");localStorage.removeItem("mfv2_sfx");document.getElementById("compact").checked=false;document.getElementById("previews").checked=true;document.getElementById("uiSound").checked=true;SFX.setEnabled(true);notice("Settings reset.")};
+if(localStorage.getItem("mfv2_compact")==="1")document.body.classList.add("compact");
+if(localStorage.getItem("mfv2_preview")==="0")document.body.classList.add("no-preview");
+document.getElementById("uiSound").checked=SFX.isEnabled();
+renderText();renderMotion();renderTransitions();renderEffects();renderTools();renderCamera();renderFonts();renderLoops();renderBundledSFX();renderFav();initGraph();
+host("info",function(r){
+  if(r.data&&r.data.ae)document.getElementById("ae").textContent="AE "+r.data.ae;
+  if(r.data&&r.data.hostVersion&&r.data.hostVersion!==EXPECTED_HOST_VERSION){
+    var w=document.getElementById("staleWarning"); if(w) w.style.display="flex";
+  }
+});
+})();
+</script>
+</body>
+</html>
